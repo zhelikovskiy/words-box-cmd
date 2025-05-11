@@ -1,0 +1,22 @@
+{
+	"name": "words-box-cmd",
+	"version": "1.0.0",
+	"description": "A simple TypeScript application",
+	"main": "src/app.ts",
+	"scripts": {
+		"build": "tsc",
+		"start": "node dist/app.js",
+		"watch": "tsc -w"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"typescript": "^4.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/yourusername/my-ts-app.git"
+	},
+	"author": "Your Name",
+	"license": "MIT"
+}
+
