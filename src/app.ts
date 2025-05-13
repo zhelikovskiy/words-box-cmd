@@ -1,7 +1,8 @@
-const main = (): void => {
-	console.log('Hello, world!');
-	console.log('This is a simple command line application.');
+import dataManager from './utils/data-manager';
+import { initApp } from './utils/utils';
+
+const main = async (): Promise<void> => {
+	initApp();
 };
 
 main();
-
