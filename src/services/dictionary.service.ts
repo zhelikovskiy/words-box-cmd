@@ -12,14 +12,8 @@ class DictionaryService {
 		return this.dm.getDictionaries();
 	}
 
-	//TODO implement id generation
 	public async create(title: string) {
-		const dictionary: Dictionary = {
-			id: Math.random(),
-			title: title,
-		};
-
-		return this.dm.addDictionary(dictionary);
+		return this.dm.addDictionary({ title });
 	}
 }
 
