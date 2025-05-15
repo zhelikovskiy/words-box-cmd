@@ -4,9 +4,7 @@ import { join } from 'path';
 import config from '../config';
 import Data from '../models/data.model';
 import IDictionaryRepository from './i-dictionary.repo';
-import IWordRepository from './i-word.repo';
 import Dictionary from '../models/dictionary.model';
-import Word from '../models/word.model';
 import { AddDictionaryDto } from './dto/add-dictionary.dto';
 
 export class DataManager implements IDictionaryRepository {
@@ -31,9 +29,12 @@ export class DataManager implements IDictionaryRepository {
 		this.db.read();
 	}
 
-	public async getDictionaries(): Promise<Dictionary[]> {
+	public async findDictionaries(): Promise<Dictionary[]> {
 		await this.db.read();
 		return this.db.data.dictionaries.data;
+	}
+	public async findDictionary(id: number): Promise<Dictionary | undefined> {
+		return this.db.data.dictionaries.data.find((item) => item.id === id);
 	}
 	public async addDictionary(data: AddDictionaryDto): Promise<void> {
 		await this.db.read();
@@ -45,6 +46,15 @@ export class DataManager implements IDictionaryRepository {
 
 		this.db.data.dictionaries.data.push(dictionary);
 		this.db.data.dictionaries.lastId = dictionary.id;
+
+		await this.db.write();
+	}
+	public async deteleDictionary(id: number): Promise<void> {
+		await this.db.read();
+
+		this.db.data.dictionaries.data = this.db.data.dictionaries.data.filter(
+			(item) => item.id !== id
+		);
 
 		await this.db.write();
 	}
