@@ -29,12 +29,27 @@ export class DataManager implements IDictionaryRepository {
 		this.db.read();
 	}
 
-	public async findDictionaries(): Promise<Dictionary[]> {
+	public async findDictionaries(
+		filter?: Partial<Dictionary>
+	): Promise<Dictionary[]> {
 		await this.db.read();
-		return this.db.data.dictionaries.data;
+
+		return this.db.data.dictionaries.data.filter((item) =>
+			Object.entries(filter ?? {}).every(
+				([key, value]) => item[key as keyof Dictionary] === value
+			)
+		);
 	}
-	public async findDictionary(id: number): Promise<Dictionary | undefined> {
-		return this.db.data.dictionaries.data.find((item) => item.id === id);
+	public async findDictionary(
+		filter: Partial<Dictionary>
+	): Promise<Dictionary | undefined> {
+		await this.db.read();
+
+		return this.db.data.dictionaries.data.find((item) =>
+			Object.entries(filter).every(
+				([key, value]) => item[key as keyof Dictionary] === value
+			)
+		);
 	}
 	public async addDictionary(data: AddDictionaryDto): Promise<void> {
 		await this.db.read();
