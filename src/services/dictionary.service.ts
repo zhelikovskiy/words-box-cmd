@@ -9,11 +9,19 @@ class DictionaryService {
 	}
 
 	public async getAll() {
-		return this.dm.getDictionaries();
+		return this.dm.findDictionaries();
+	}
+
+	public async getOne(id: number): Promise<Dictionary | undefined> {
+		return await this.dm.findDictionary({ id });
 	}
 
 	public async create(title: string) {
 		return this.dm.addDictionary({ title });
+	}
+
+	public async deleteOne(id: number) {
+		return this.dm.deteleDictionary(id);
 	}
 }
 
