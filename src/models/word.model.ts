@@ -1,20 +1,11 @@
-type partOfSpeech =
-	| 'noun'
-	| 'verb'
-	| 'adjective'
-	| 'adverb'
-	| 'pronoun'
-	| 'preposition'
-	| 'conjunction'
-	| 'interjection'
-	| 'other';
+import { partOfSpeech } from '../utils/parts-of-speach';
 
 interface Word {
 	id: number;
 	dictionaryId: number;
 	term: string;
 	translation: string;
-	partOfSpeech: string;
+	partOfSpeech: partOfSpeech;
 	learned: boolean;
 }
 

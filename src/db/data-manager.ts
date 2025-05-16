@@ -8,6 +8,7 @@ import Dictionary from '../models/dictionary.model';
 import { AddDictionaryDto } from './dto/add-dictionary.dto';
 import WordRepository from './word-repository.interface';
 import Word from '../models/word.model';
+import { AddWordDto } from './dto/add-word.dto';
 
 export class DataManager implements DictionaryRepository, WordRepository {
 	private db: Low<Data>;
@@ -98,7 +99,7 @@ export class DataManager implements DictionaryRepository, WordRepository {
 			)
 		);
 	}
-	public async addWord(data: Word): Promise<void> {
+	public async addWord(data: AddWordDto): Promise<void> {
 		await this.db.read();
 
 		const word: Word = {
