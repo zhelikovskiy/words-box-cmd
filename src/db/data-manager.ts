@@ -3,11 +3,11 @@ import { JSONFile } from 'lowdb/node';
 import { join } from 'path';
 import config from '../config';
 import Data from '../models/data.model';
-import IDictionaryRepository from './i-dictionary.repo';
+import DictionaryRepository from './dictionary-repository.interface';
 import Dictionary from '../models/dictionary.model';
 import { AddDictionaryDto } from './dto/add-dictionary.dto';
 
-export class DataManager implements IDictionaryRepository {
+export class DataManager implements DictionaryRepository {
 	private db: Low<Data>;
 
 	constructor(

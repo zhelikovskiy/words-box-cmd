@@ -1,6 +1,6 @@
 import Dictionary from '../models/dictionary.model';
 
-interface IDictionaryRepository {
+interface DictionaryRepository {
 	findDictionaries(filter?: Partial<Dictionary>): Promise<Dictionary[]>;
 	findDictionary(
 		filter: Partial<Dictionary>
@@ -9,4 +9,4 @@ interface IDictionaryRepository {
 	deteleDictionary(id: number): Promise<void>;
 }
 
-export default IDictionaryRepository;
+export default DictionaryRepository;

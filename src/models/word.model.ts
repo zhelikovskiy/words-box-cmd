@@ -1,10 +1,20 @@
+type partOfSpeech =
+	| 'noun'
+	| 'verb'
+	| 'adjective'
+	| 'adverb'
+	| 'pronoun'
+	| 'preposition'
+	| 'conjunction'
+	| 'interjection'
+	| 'other';
+
 interface Word {
 	id: number;
 	dictionaryId: number;
-	translation1: string;
-	translation2: string;
+	term: string;
+	translation: string;
 	partOfSpeech: string;
-	priority: number;
 	learned: boolean;
 }
 
