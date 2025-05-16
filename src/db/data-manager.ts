@@ -6,8 +6,10 @@ import Data from '../models/data.model';
 import DictionaryRepository from './dictionary-repository.interface';
 import Dictionary from '../models/dictionary.model';
 import { AddDictionaryDto } from './dto/add-dictionary.dto';
+import WordRepository from './word-repository.interface';
+import Word from '../models/word.model';
 
-export class DataManager implements DictionaryRepository {
+export class DataManager implements DictionaryRepository, WordRepository {
 	private db: Low<Data>;
 
 	constructor(
@@ -68,6 +70,55 @@ export class DataManager implements DictionaryRepository {
 		await this.db.read();
 
 		this.db.data.dictionaries.data = this.db.data.dictionaries.data.filter(
+			(item) => item.id !== id
+		);
+
+		this.db.data.words.data = this.db.data.words.data.filter(
+			(item) => item.dictionaryId !== id
+		);
+
+		await this.db.write();
+	}
+
+	public async findWords(filter?: Partial<Word>): Promise<Word[]> {
+		await this.db.read();
+
+		return this.db.data.words.data.filter((item) =>
+			Object.entries(filter ?? {}).every(
+				([key, value]) => item[key as keyof Word] === value
+			)
+		);
+	}
+	public async findWord(filter: Partial<Word>): Promise<Word | undefined> {
+		await this.db.read();
+
+		return this.db.data.words.data.find((item) =>
+			Object.entries(filter).every(
+				([key, value]) => item[key as keyof Word] === value
+			)
+		);
+	}
+	public async addWord(data: Word): Promise<void> {
+		await this.db.read();
+
+		const word: Word = {
+			id: this.db.data.words.lastId + 1,
+			dictionaryId: data.dictionaryId,
+			term: data.term,
+			translation: data.translation,
+			partOfSpeech: data.partOfSpeech,
+			learned: data.learned,
+		};
+
+		this.db.data.words.data.push(word);
+		this.db.data.words.lastId = word.id;
+
+		await this.db.write();
+	}
+	public async deleteWord(id: number): Promise<void> {
+		await this.db.read();
+
+		this.db.data.words.data = this.db.data.words.data.filter(
 			(item) => item.id !== id
 		);
 
