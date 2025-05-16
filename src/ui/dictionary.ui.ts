@@ -2,6 +2,7 @@ import * as inquirer from '@inquirer/prompts';
 import dictionaryService from '../services/dictionary.service';
 import { waitingForInput } from '../utils/utils';
 import Dictionary from '../models/dictionary.model';
+import wordService from '../services/word.service';
 
 const main = async (id: number) => {
 	const dictionary: Dictionary | undefined = await dictionaryService.getOne(
@@ -32,6 +33,7 @@ const main = async (id: number) => {
 
 		switch (answer) {
 			case 1:
+				await wordsListMenu(dictionary.id);
 				break;
 			case 2:
 				await deleteDictionaryMenu(dictionary);
@@ -61,6 +63,50 @@ const deleteDictionaryMenu = async (dictionary: Dictionary) => {
 		await waitingForInput();
 
 		return;
+	}
+};
+
+const wordsListMenu = async (dictionaryId: number) => {
+	while (true) {
+		console.clear();
+
+		const wordsList = (
+			await wordService.getAllByDictionaryId(dictionaryId)
+		).map(
+			(
+				word: { id: number; term: string; translation: string },
+				index: number
+			) => {
+				return {
+					name: `${index + 1}. ${word.term} - ${word.translation}`,
+					value: word.id,
+				};
+			}
+		);
+
+		const choice = await inquirer.select({
+			message: 'Select:',
+			choices: [
+				...wordsList,
+				{
+					name: ` Add new`,
+					value: -1,
+				},
+				{
+					name: ` Back`,
+					value: -2,
+				},
+			],
+		});
+
+		switch (choice) {
+			case -1:
+				break;
+			case -2:
+				return;
+			default:
+				break;
+		}
 	}
 };
 

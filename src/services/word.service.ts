@@ -13,6 +13,10 @@ class WordService {
 		return this.dm.findWords();
 	}
 
+	public async getAllByDictionaryId(dictionaryId: number) {
+		return this.dm.findWords({ dictionaryId: dictionaryId });
+	}
+
 	public async getOneById(id: number) {
 		return this.dm.findWord({ id });
 	}
