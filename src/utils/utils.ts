@@ -15,6 +15,10 @@ export async function waitingForInput() {
 	});
 }
 
+export function isCommand(input: string, commands: string[]): boolean {
+	return commands.includes(input.trim().toLowerCase());
+}
+
 export function initApp() {
 	checkAppDir();
 }
