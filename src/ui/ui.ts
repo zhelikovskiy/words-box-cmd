@@ -1,6 +1,7 @@
 import * as inquirer from '@inquirer/prompts';
 import dictionariesUi from './dictionaries.ui';
 
+//TODO improve the interface with chalk, boxen, cli-table3, figlet, gradient-string
 const main = async () => {
 	while (true) {
 		console.clear();
