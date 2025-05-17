@@ -94,6 +94,7 @@ export class DataManager implements DictionaryRepository, WordRepository {
 
 		let result = this.db.data.words.data.filter((item) =>
 			Object.entries(filter ?? {}).every(([key, value]) => {
+				if (value === undefined) return true;
 				if (key === 'partOfSpeech') {
 					if (Array.isArray(value)) {
 						return value.includes(item.partOfSpeech);

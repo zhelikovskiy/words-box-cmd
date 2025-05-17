@@ -13,6 +13,21 @@ class WordService {
 		return this.dm.findWords();
 	}
 
+	public async getAllByFilter(
+		dictionaryId: number,
+		filter: { learned: boolean; partOfSpeech?: PartOfSpeech[] },
+		limit: number
+	) {
+		return await this.dm.findWords(
+			{
+				dictionaryId: dictionaryId,
+				partOfSpeech: filter.partOfSpeech,
+				learned: filter.learned,
+			},
+			{ sortBy: 'createdAt', sortOrder: 'desc', limit }
+		);
+	}
+
 	public async getAllByDictionaryId(dictionaryId: number) {
 		return this.dm.findWords({ dictionaryId: dictionaryId });
 	}
