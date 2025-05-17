@@ -3,7 +3,7 @@ import Table from 'cli-table3';
 import wordService from '../services/word.service';
 import { isCommand, waitingForInput } from '../utils/utils';
 import Word from '../models/word.model';
-import { PartOfSpeechEnum } from '../utils/parts-of-speach';
+import { PartOfSpeech } from '../utils/parts-of-speach';
 
 const showWordsTable = async (words: Word[]) => {
 	const wordsTable = new Table({
@@ -73,8 +73,8 @@ const addWordMenu = async (dictionaryId: number) => {
 		const translation = await addWordInputs.translationInput();
 
 		const partOfSpeechKey =
-			(await addWordInputs.partOfSpeechInput()) as keyof typeof PartOfSpeechEnum;
-		const partOfSpeach = PartOfSpeechEnum[partOfSpeechKey];
+			(await addWordInputs.partOfSpeechInput()) as keyof typeof PartOfSpeech;
+		const partOfSpeach = PartOfSpeech[partOfSpeechKey];
 
 		try {
 			await wordService.createOne(
@@ -148,13 +148,13 @@ const addWordInputs = {
 	partOfSpeechInput: async () => {
 		return await inquirer.select({
 			message: 'Choose what part of speech this is:',
-			choices: Object.entries(PartOfSpeechEnum).map(
+			choices: Object.entries(PartOfSpeech).map(
 				([key, value], index: number) => ({
 					name: `${index + 1} ${value}`,
 					value: key,
 				})
 			),
-			pageSize: Object.keys(PartOfSpeechEnum).length,
+			pageSize: Object.keys(PartOfSpeech).length,
 		});
 	},
 };

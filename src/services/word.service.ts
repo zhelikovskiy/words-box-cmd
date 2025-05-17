@@ -1,6 +1,6 @@
 import dataManager, { DataManager } from '../db/data-manager';
 import { AddWordDto } from '../db/dto/add-word.dto';
-import { partOfSpeech } from '../utils/parts-of-speach';
+import { PartOfSpeech } from '../utils/parts-of-speach';
 
 class WordService {
 	private dm: DataManager;
@@ -25,7 +25,7 @@ class WordService {
 		dictionaryId: number,
 		term: string,
 		translation: string,
-		partOfSpeech: partOfSpeech
+		partOfSpeech: PartOfSpeech
 	) {
 		const existingWord = await this.dm.findWord({
 			dictionaryId: dictionaryId,

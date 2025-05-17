@@ -1,11 +1,11 @@
-import { partOfSpeech } from '../utils/parts-of-speach';
+import { PartOfSpeech } from '../utils/parts-of-speach';
 
 interface Word {
 	id: number;
 	dictionaryId: number;
 	term: string;
 	translation: string;
-	partOfSpeech: partOfSpeech;
+	partOfSpeech: PartOfSpeech;
 	learned: boolean;
 }
 
