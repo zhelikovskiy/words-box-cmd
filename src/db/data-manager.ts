@@ -9,6 +9,7 @@ import { AddDictionaryDto } from './dto/add-dictionary.dto';
 import WordRepository from './word-repository.interface';
 import Word from '../models/word.model';
 import { AddWordDto } from './dto/add-word.dto';
+import { WordsFilterType } from '../utils/utils';
 
 export class DataManager implements DictionaryRepository, WordRepository {
 	private db: Low<Data>;
@@ -81,14 +82,43 @@ export class DataManager implements DictionaryRepository, WordRepository {
 		await this.db.write();
 	}
 
-	public async findWords(filter?: Partial<Word>): Promise<Word[]> {
+	public async findWords(
+		filter?: WordsFilterType,
+		options?: {
+			sortBy?: keyof Word;
+			sortOrder?: 'asc' | 'desc';
+			limit?: number;
+		}
+	): Promise<Word[]> {
 		await this.db.read();
 
-		return this.db.data.words.data.filter((item) =>
-			Object.entries(filter ?? {}).every(
-				([key, value]) => item[key as keyof Word] === value
-			)
+		let result = this.db.data.words.data.filter((item) =>
+			Object.entries(filter ?? {}).every(([key, value]) => {
+				if (key === 'partOfSpeech') {
+					if (Array.isArray(value)) {
+						return value.includes(item.partOfSpeech);
+					}
+				}
+				return item[key as keyof Word] === value;
+			})
 		);
+
+		if (options?.sortBy) {
+			result = result.sort((a, b) => {
+				const aValue = a[options.sortBy!];
+				const bValue = b[options.sortBy!];
+				if (aValue === bValue) return 0;
+				if (options.sortOrder === 'desc') {
+					return aValue < bValue ? 1 : -1;
+				}
+				return aValue > bValue ? 1 : -1;
+			});
+		}
+
+		if (options?.limit !== undefined)
+			(result = result.slice(0)), options.limit;
+
+		return result;
 	}
 	public async findWord(filter: Partial<Word>): Promise<Word | undefined> {
 		await this.db.read();
@@ -109,6 +139,7 @@ export class DataManager implements DictionaryRepository, WordRepository {
 			translation: data.translation,
 			partOfSpeech: data.partOfSpeech,
 			learned: data.learned,
+			createdAt: new Date(),
 		};
 
 		this.db.data.words.data.push(word);

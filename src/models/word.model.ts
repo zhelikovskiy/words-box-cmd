@@ -7,6 +7,7 @@ interface Word {
 	translation: string;
 	partOfSpeech: PartOfSpeech;
 	learned: boolean;
+	createdAt: Date;
 }
 
 export default Word;
