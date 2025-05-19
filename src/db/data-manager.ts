@@ -10,6 +10,7 @@ import WordRepository from './word-repository.interface';
 import Word from '../models/word.model';
 import { AddWordDto } from './dto/add-word.dto';
 import { WordsFilterType } from '../utils/utils';
+import { UpdateWordDto } from './dto/update-word.dto';
 
 export class DataManager implements DictionaryRepository, WordRepository {
 	private db: Low<Data>;
@@ -145,6 +146,26 @@ export class DataManager implements DictionaryRepository, WordRepository {
 
 		this.db.data.words.data.push(word);
 		this.db.data.words.lastId = word.id;
+
+		await this.db.write();
+	}
+	public async updateWord(data: UpdateWordDto): Promise<void> {
+		await this.db.read();
+
+		const wordIndex = this.db.data.words.data.findIndex(
+			(item) => item.id === data.id
+		);
+
+		if (wordIndex === -1) {
+			throw new Error(
+				`Data Manager : updateWord : Word with id ${data.id} not found`
+			);
+		}
+
+		this.db.data.words.data[wordIndex] = {
+			...this.db.data.words.data[wordIndex],
+			...data,
+		};
 
 		await this.db.write();
 	}
