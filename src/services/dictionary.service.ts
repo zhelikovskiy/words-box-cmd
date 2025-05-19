@@ -1,7 +1,7 @@
 import dataManager, { DataManager } from '../db/data-manager';
 import Dictionary from '../models/dictionary.model';
 
-class DictionaryService {
+export class DictionaryService {
 	private dm: DataManager;
 
 	constructor(dataManager: DataManager) {
@@ -9,17 +9,23 @@ class DictionaryService {
 	}
 
 	public async getAll() {
-		return this.dm.getDictionaries();
+		return this.dm.findDictionaries();
 	}
 
-	//TODO implement id generation
-	public async create(title: string) {
-		const dictionary: Dictionary = {
-			id: Math.random(),
-			title: title,
-		};
+	public async getOne(id: number): Promise<Dictionary> {
+		const dict = await this.dm.findDictionary({ id });
 
-		return this.dm.addDictionary(dictionary);
+		if (!dict) throw new Error('Something went wrong!');
+
+		return dict;
+	}
+
+	public async create(title: string) {
+		return this.dm.addDictionary({ title });
+	}
+
+	public async deleteOne(id: number) {
+		return this.dm.deteleDictionary(id);
 	}
 }
 
