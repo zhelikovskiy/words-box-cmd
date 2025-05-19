@@ -13,6 +13,8 @@ const dictionarySelection = async (
 		}
 	);
 
+	if (!dictionariesList)
+		console.log(`Oops. You don't have any dictionary yet.\n\n`);
 	return await inquirer.select({
 		message: 'Select:',
 		choices: [...dictionariesList, ...options],
