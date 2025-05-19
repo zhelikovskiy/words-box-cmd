@@ -2,7 +2,7 @@ import dataManager, { DataManager } from '../db/data-manager';
 import { AddWordDto } from '../db/dto/add-word.dto';
 import { PartOfSpeech } from '../utils/parts-of-speach';
 
-export class WordService {
+class WordService {
 	private dm: DataManager;
 
 	constructor(dataManager: DataManager) {
@@ -64,6 +64,18 @@ export class WordService {
 
 	public async deleteOne(id: number) {
 		return this.dm.deleteWord(id);
+	}
+
+	public async updateOne(
+		id: number,
+		data: {
+			term?: string;
+			translation?: string;
+			partOfSpeech?: PartOfSpeech;
+			learned?: boolean;
+		}
+	) {
+		return await this.dm.updateWord({ id, ...data });
 	}
 }
 
