@@ -2,31 +2,22 @@ import * as inquirer from '@inquirer/prompts';
 import dictionaryService from '../services/dictionary.service';
 import dictionaryUi from './dictionary.ui';
 import { waitingForInput } from '../utils/utils';
+import ui from './ui';
 
 const main = async () => {
 	while (true) {
 		console.clear();
 
-		const dictionariesList = (await dictionaryService.getAll()).map(
-			(dict: { id: number; title: string }, index: number) => {
-				return { name: `${index + 1}. ${dict.title}`, value: dict.id };
-			}
-		);
-
-		const choice = await inquirer.select({
-			message: 'Select:',
-			choices: [
-				...dictionariesList,
-				{
-					name: ` Add new`,
-					value: -1,
-				},
-				{
-					name: ` Back`,
-					value: -2,
-				},
-			],
-		});
+		const choice = await ui.dictionarySelection([
+			{
+				name: ` Add new`,
+				value: -1,
+			},
+			{
+				name: ` Back`,
+				value: -2,
+			},
+		]);
 
 		switch (choice) {
 			case -1:

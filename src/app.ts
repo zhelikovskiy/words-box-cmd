@@ -1,10 +1,10 @@
 import { initApp } from './utils/utils';
-import ui from './ui/ui';
+import mainUi from './ui/main.ui';
 
 const main = async (): Promise<void> => {
 	initApp();
 
-	await ui.main();
+	await mainUi.main();
 };
 
 main();

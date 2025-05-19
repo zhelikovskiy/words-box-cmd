@@ -1,41 +1,22 @@
 import * as inquirer from '@inquirer/prompts';
-import dictionariesUi from './dictionaries.ui';
+import dictionaryService from '../services/dictionary.service';
 
-//TODO improve the interface with chalk, boxen, cli-table3, figlet, gradient-string
-const main = async () => {
-	while (true) {
-		console.clear();
-
-		const choice = await inquirer.select({
-			message: 'Select:',
-			choices: [
-				{
-					name: '1. Dictionaries',
-					value: 1,
-				},
-				{
-					name: '2. Learning',
-					value: 2,
-				},
-				{
-					name: '3. Exit',
-					value: 3,
-				},
-			],
-		});
-
-		switch (choice) {
-			case 1:
-				await dictionariesUi.main();
-				break;
-			case 2:
-				console.log('not implemented');
-				break;
-			case 3:
-				console.log('Goodbye!');
-				process.exit(0);
+const dictionarySelection = async (
+	options: {
+		name: string;
+		value: number;
+	}[] = []
+): Promise<number> => {
+	const dictionariesList = (await dictionaryService.getAll()).map(
+		(dict: { id: number; title: string }, index: number) => {
+			return { name: `${index + 1}. ${dict.title}`, value: dict.id };
 		}
-	}
+	);
+
+	return await inquirer.select({
+		message: 'Select:',
+		choices: [...dictionariesList, ...options],
+	});
 };
 
-export default { main };
+export default { dictionarySelection };
