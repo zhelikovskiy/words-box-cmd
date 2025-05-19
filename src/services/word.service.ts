@@ -2,7 +2,7 @@ import dataManager, { DataManager } from '../db/data-manager';
 import { AddWordDto } from '../db/dto/add-word.dto';
 import { PartOfSpeech } from '../utils/parts-of-speach';
 
-class WordService {
+export class WordService {
 	private dm: DataManager;
 
 	constructor(dataManager: DataManager) {
@@ -16,7 +16,7 @@ class WordService {
 	public async getAllByFilter(
 		dictionaryId: number,
 		filter: { learned: boolean; partOfSpeech?: PartOfSpeech[] },
-		limit: number
+		limit?: number
 	) {
 		return await this.dm.findWords(
 			{
